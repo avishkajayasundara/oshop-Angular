@@ -27,6 +27,9 @@ import { CategoryService } from './category.service';
 import {FormsModule}  from '@angular/forms';
 import { ProductService } from './product.service';
 import {CustomFormsModule} from  'ng2-validation';
+import { DataTableModule } from 'angular5-data-table';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +48,7 @@ import {CustomFormsModule} from  'ng2-validation';
     
   ],
   imports: [
+    DataTableModule.forRoot(),
     BrowserModule,
     FormsModule,
     CustomFormsModule,

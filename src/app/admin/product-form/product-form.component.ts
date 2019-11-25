@@ -12,28 +12,44 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit {
-  product={};
+  product = {};
   categories$;
   id;
   constructor(
-    private router:Router,
-      private route:ActivatedRoute,
+    private router: Router,
+    private route: ActivatedRoute,
     private categoryService: CategoryService,
     private productService: ProductService) {
 
     this.categories$ = categoryService.getCategories();
-    
-    
+
+    this.id = this.route.snapshot.paramMap.get('id');
+
+    if (this.id) {
+      this.productService.get(this.id).snapshotChanges().take(1).subscribe(p => this.product = p);
+    }
+
+
   }
   save(product) {
-    this.productService.create(product);
+    if (this.id) {
+      this.productService.update(this.id, product);
+    } else {
+      this.productService.create(product);
+    }
     this.router.navigate(['/admin/products']);
 
   }
+  delete(){
+    if(confirm('Delete this product?')){
+      this.productService.delete(this.id);
+      this.router.navigate(['/admin/products']);
+    }
+  }
   ngOnInit() {
-    let id=this.route.snapshot.paramMap.get('id');
-    if(id){
-      this.productService.get(id).valueChanges().take(1).subscribe(p=>this.product=p);
+    let id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.productService.get(id).valueChanges().take(1).subscribe(p => this.product = p);
 
     }
 
